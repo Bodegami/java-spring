@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: cadastro
+  datasource:
+    url: jdbc:mysql://localhost:3306/clientes?useTimezone=true&serverTimezone=America/Sao_Paulo
+    username: root
+    password: root
+    testWhileIdle: true
+    validationQuery: SELECT 1
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
