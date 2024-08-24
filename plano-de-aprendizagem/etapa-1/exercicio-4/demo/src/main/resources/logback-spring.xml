@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+    <included>
+        <conversionRule conversionWord="clr"
+                        converterClass="org.springframework.boot.logging.logback.ColorConverter" />
+    </included>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%blue(%d{HH:mm:ss.SSS}) %green([%-20.20thread]) %highlight([%-5level]) %yellow(%-0.40logger{39}) %magenta([%mdc]) : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="default">
+        <root level="info" additivity="false">
+            <appender-ref ref="console" />
+        </root>
+    </springProfile>
+</configuration>

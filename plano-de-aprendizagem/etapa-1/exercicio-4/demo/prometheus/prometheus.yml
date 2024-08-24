@@ -1,0 +1,18 @@
+# task-manager:8080         -> se refere ao container da aplicacao em execucao
+# host.docker.internal:8080 -> se refere a aplicacao em execucao no localhost
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'demo'
+    scrape_interval: 5s
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['task-manager:8080'] #, 'host.docker.internal:8080']
+        labels:
+          application: 'api-tarefas'

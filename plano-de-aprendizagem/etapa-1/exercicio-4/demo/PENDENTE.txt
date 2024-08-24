@@ -1,0 +1,31 @@
+* Exception Handler - OK
+* Dockerfile - OK
+* Padronizar os logs - OK
+* Instrumentalizar a api para o prometheus - OK
+* Configurar docker-compose com prometheus e grafana - OK
+* Configurar datasource do prometheus no grafana - OK
+* Criar ao menos 1 dashboard com 3 paineis no grafana - OK
+
+
+Gerou novas atualizações e quer testar no container?
+Vá até a raiz do projeto e execute o comando no terminal:
+gradle clean build
+
+Depois é só executar o comando do docker-compose:
+docker-compose up --build
+
+No arquivo prometheus.yml, caso for executar a aplicacao dentro de um container, o 'targets' deve
+ser o 'nome_container:porta_container'. Já local, seria 'localhost:porta' ou 'host.docker.internal:porta'.
+
+O usuario e senha padrao do grafana é admin/admin
+
+* Obs:
+- Em um projeto real, ainda seria necessário vai o 'push' dessa imagem para o registry, de forma
+  que qualquer pessoa do time possa fazer o download da versão.
+- No grafana, nas opções de configuração do datasource, selecionando o grafana, devemos passar a
+  url do prometheus. Essa rota deve mudar dependendo de onde está executando a aplicação.
+  container: url -> http://container_name:container_port
+  local: url     -> http://localhost:porta
+- No grafana podemos utilizar labels nas legendas, exemplo:
+{{method}}/{{outcome}}//{(status)} -> POST/SUCCESS/201
+

@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: demo
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/tarefas?useTimezone=true&serverTimezone=America/Sao_Paulo
+    username: root
+    password: root
+    testWhileIdle: true
+    validationQuery: SELECT 1
+  jpa:
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
