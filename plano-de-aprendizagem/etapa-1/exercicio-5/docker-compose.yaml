@@ -1,0 +1,106 @@
+# Use root/example as user/password credentials
+version: '3.1'
+
+services:
+    
+  auth-db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    container_name: auth-db
+    hostname: auth-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./auth-api/sql/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - ./auth-api/db_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+    networks:
+      - auth-net
+      
+  auth-api:
+    build:
+      context: ./auth-api
+      dockerfile: Dockerfile
+    image: auth-api:latest
+    container_name: auth-api
+    hostname: auth-api
+    restart: always
+    environment:
+      DB_HOST: auth-db
+      DB_PORT: 3306
+    ports:
+      - 8005:8005
+    networks:
+      - auth-net
+      - book-net
+    depends_on:
+      - auth-db
+
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: books
+    ports:
+      - 27017:27017
+    volumes:
+      - ./bookstore/data_db:/data/db
+      - ./bookstore/mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - book-net
+
+#  prometheus:
+#    image: prom/prometheus:latest
+#    user: root
+#    container_name: prometheus
+#    hostname: prometheus
+#    restart: always
+#    volumes:
+#      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+#      - prometheus_data:/prometheus
+#    networks:
+#      - book-net
+#    ports:
+#      - 9090:9090
+#
+#  grafana:
+#    image: grafana/grafana:10.4.7
+#    container_name: grafana
+#    ports:
+#      - 3000:3000
+#    networks:
+#      - book-net
+
+#  task-manager:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    image: bookstore:latest
+#    container_name: bookstore
+#    hostname: bookstore
+#    restart: always
+#    environment:
+#      DB_HOST: database
+#      DB_PORT: 3306
+#    ports:
+#      - 8080:8080
+#    networks:
+#      - book-net
+#    depends_on:
+#      - database
+#      - prometheus
+#      - grafana
+
+networks:
+  book-net:
+    driver: bridge
+  auth-net:
+    driver: bridge  
+
+volumes:
+  db_data:
+  prometheus_data:

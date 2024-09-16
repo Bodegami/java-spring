@@ -1,0 +1,13 @@
+
+spring:
+  application:
+    name: bookstore
+  data:
+    mongodb:
+      uri: mongodb://user:example@localhost:27017/books
+#      host: localhost
+#      port: 27017
+#      database: books
+#      username: root
+#      password: example
+#      authentication-database: admin
